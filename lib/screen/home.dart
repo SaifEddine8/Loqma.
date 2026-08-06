@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
   
 class _HomeScreen extends State<HomeScreen> {
+  
   String categoryName='All';
   int selectedCategory=0;
   String search='';
@@ -34,9 +35,11 @@ void dispose() {
 }
   @override
   Widget build(BuildContext context) {
-
-
-
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+final double itemWidth = (screenWidth - 32 - 10) / 2;
+final double requiredItemHeight = 143 + 140;
+final double dynamicAspectRatio = itemWidth / requiredItemHeight;
     offersNotifier.value=offersNotifier.value.where((item)=>item.expiryDate.isAfter(DateTime.now())).toList();
 
     List<Offer> filterProducts=offersNotifier.value.where((item){
@@ -116,7 +119,14 @@ void dispose() {
             ),
             
             Expanded(
-              child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 10,mainAxisSpacing: 10,childAspectRatio: 0.75), 
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio:dynamicAspectRatio
+                  ), 
+                  
               itemCount: filterProducts.length,
               itemBuilder:(context,index)=> ItemCard(offer: filterProducts[index],)
                ),

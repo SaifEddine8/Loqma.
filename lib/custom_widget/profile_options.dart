@@ -21,7 +21,7 @@ class ProfileOptions extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
       
-          height: height/8,
+          height: height/12,
           width: .infinity,
           
           child: Row(
@@ -31,6 +31,7 @@ class ProfileOptions extends StatelessWidget {
                 spacing: 10,
                 children: [
                   Icon(preIcon,color: ConstantColors.secondaryColor),
+                  SizedBox(width: width/20,),
                   Text(optionTitle,style: ConstantStyle.titeStyle.copyWith(fontWeight: .w600),),
                 ],
               ),

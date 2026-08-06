@@ -29,8 +29,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool passScure=true;
 
   final _formkey=GlobalKey<FormState>();
+  
   @override
   Widget build(BuildContext context) {
+    final h=MediaQuery.of(context).size.height;
+    final w=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
       
@@ -43,9 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               spacing: 20,
               children: [
-                Lottie.network(hasAccount?'https://lottie.host/a84f6b75-d1b8-4189-bf3c-0445ffd99c6b/wAF8ZfG3fn.json':'https://lottie.host/e5e81888-f44b-407e-9f75-7a021b2a1fc0/JMUgYAHkES.json',
-                width: 200,height: 200),
-                
+               
+                Image.asset('assets/Logo.png',
+                      width: w*.5,
+                      height: h*.3,
+                    ),
                 
                 Form(
                   key: _formkey,
@@ -86,6 +91,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) {
                     if(Utils.checkPassword(value!))
                     {
+                      if(hasAccount)
+                      {bool isValidUser=users.any((user) => user.email==emailController.text&&user.password==value);
+                      if(!isValidUser)
+                      {return 'Password incorrect';}
+                      }
+
                       return null;
                     }
                     else
@@ -140,6 +151,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     {
                       users.add(
                       UserModel(email: emailController.text, password: passwordController.text, fullName: usernameController.text,phone: phoneController.text));
+                       setState(() {
+                       hasAccount=!hasAccount;
+                       passwordController.clear();
+                        emailController.clear();
+                        usernameController.clear();
+                        phoneController.clear();
+                       });
                        }}
                       
 

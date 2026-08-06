@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/custom_widget/text_from_field_class.dart';
+import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/user_model.dart';
 import 'package:loqma/provider/update_user_provider.dart';
 import 'package:loqma/utils.dart';
@@ -91,7 +92,9 @@ class _ChangePasswordSheetScreenState extends State<ChangePasswordSheetScreen> {
                     profileImage: userProvider.currentUser!.profileImage,
                     location: userProvider.currentUser!.location
                   );
+                  int userIndex = users.indexWhere((user) => user.id == userProvider.currentUser!.id);
                   userProvider.updateUser(updatedUser);
+                  users[userIndex] = userProvider.currentUser!;
                   Navigator.pop(context);
                 }
               }, child: Text('Change Password',style: ConstantStyle.titeStyle.copyWith(color: Colors.white),)),

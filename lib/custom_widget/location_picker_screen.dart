@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:loqma/constant/constant_colors.dart';
+import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/models/address_model.dart';
 
 class LocationPickerScreen extends StatefulWidget {
@@ -118,9 +119,9 @@ Future<AddressModel> getAddress() async {
                 if (!context.mounted) return;
                 Navigator.pop(context, address);
               },
-              child: const Text(
+              child:  Text(
                 "Confirm Location",
-                style: TextStyle(fontSize: 16),
+                style: ConstantStyle.titeStyle.copyWith(color: Colors.white),
               ),
             ),
           ),

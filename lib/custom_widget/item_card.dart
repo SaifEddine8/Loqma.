@@ -36,80 +36,84 @@ class _ItemCardState extends State<ItemCard> {
           children: [
 
             /// الصورة
-            Stack(
-              children: [
-
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(18),
+            Expanded(
+              flex: 2,
+              child: Stack(
+                children: [
+              
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(18),
+                    ),
+                    child: Image.network(
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrOjwDT1psaP5bz_sw0Le14wmWViiyRytwJY-529Atyg&s=10',
+                      // height: MediaQuery.of(context).size.height/5.5,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrOjwDT1psaP5bz_sw0Le14wmWViiyRytwJY-529Atyg&s=10',
-                    height: MediaQuery.of(context).size.height/5.5,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.white,
-                    child: InkWell(
-                      onTap: () 
-                      {
-                        context.read<FavoriteOfferProvider>().toggleFavorite(widget.offer);
-
+              
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundColor: Colors.white,
+                      child: InkWell(
+                        onTap: () 
+                        {
+                          context.read<FavoriteOfferProvider>().toggleFavorite(widget.offer);
+              
+                          
+                        } 
                         
-                      } 
+                        ,
                       
-                      ,
-                    
-                        child: Consumer<FavoriteOfferProvider>(
-                          builder: (context, value, child) => 
-                          Icon(
-                            value.offers.contains(widget.offer)? Icons.favorite:Icons.favorite_border,
-                            size: 18,
-                            color: Colors.red,
+                          child: Consumer<FavoriteOfferProvider>(
+                            builder: (context, value, child) => 
+                            Icon(
+                              value.offers.contains(widget.offer)? Icons.favorite:Icons.favorite_border,
+                              size: 18,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                
-
-                Positioned(
-                  left: 8,
-                  top: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: widget.offer.type==OfferType.donation
-                          ? Colors.green
-                          : Colors.orange,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      widget.offer.type==OfferType.donation
-                          ? "Donation"
-                          : "Sale",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
+                  
+              
+                  Positioned(
+                    left: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: widget.offer.type==OfferType.donation
+                            ? Colors.green
+                            : Colors.orange,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        widget.offer.type==OfferType.donation
+                            ? "Donation"
+                            : "Sale",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
 
             Expanded(
+              flex: 2,
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(

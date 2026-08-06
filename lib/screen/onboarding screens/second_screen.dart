@@ -13,7 +13,7 @@ class SecondScreen extends StatelessWidget {
                 spacing: 30,
                 children: [ 
                   
-                  Image.asset('assets/onBoarding/second_screen.jpg',
+                  Image.asset('assets/onBoarding/second_screen.png',
                       width: 200,
                       height: 200,
                     ),

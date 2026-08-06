@@ -473,7 +473,9 @@ DateTime? selectedDate;
                   }, child: Text('ADD OFFER',style: ConstantStyle.titeStyle.copyWith(color: ConstantColors.tertiaryColor),),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ConstantColors.primaryColor,
-                    shape: BeveledRectangleBorder(),
+                    shape: RoundedSuperellipseBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     
                   ),
                   )
