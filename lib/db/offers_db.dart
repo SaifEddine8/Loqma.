@@ -4,7 +4,7 @@ import 'package:loqma/models/offer_model.dart';
 
 final  ValueNotifier<List<Offer>> offersNotifier = ValueNotifier<List<Offer>>([
   Offer(
-  ownerId:5 ,
+  ownerId:2 ,
     title: 'وجبة برغر دجاج مضاعفة',
     description: 'وجبة برغر مع بطاطا فائضة عن طلب مطعم، جاهزة للتناول الفوري.',
     quantity: 2,
@@ -20,7 +20,7 @@ final  ValueNotifier<List<Offer>> offersNotifier = ValueNotifier<List<Offer>>([
 
   // 2. Vegetables
   Offer(
-    ownerId: 10,
+    ownerId: 2,
     title: 'صندوق خضروات مشكلة طازجة',
     description: 'تشكيلة طماطم، خيار، وبطاطا بحالة ممتازة للتبرع المباشر.',
     quantity: 4,

@@ -6,7 +6,8 @@ List<UserModel> users=[UserModel(
   fullName: 'Saif',
   password: '123456',
   email: 'saif@example.com',
-  phone: '0791234567'
+  phone: '0791234567',
+  type: UserType.admin
   
   ),
   UserModel(
@@ -20,6 +21,7 @@ List<UserModel> users=[UserModel(
     longitude: 35.8500,
   ),
     donations: [],
+    type:.user
   ),
 
   UserModel(
@@ -33,6 +35,7 @@ List<UserModel> users=[UserModel(
     longitude: 35.8500,
   ),
     donations: [],
+    type:.volunteer
   ),
 
   UserModel(
@@ -46,6 +49,7 @@ List<UserModel> users=[UserModel(
     longitude: 35.8500,
   ),
     donations: [],
+    type:.user
   ),
 
   UserModel(
@@ -59,6 +63,7 @@ List<UserModel> users=[UserModel(
     longitude: 35.8500,
   ),
     donations: [],
+    type:.user
   ),
   ];
 

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
+import 'package:loqma/custom_widget/cart_icon.dart';
 import 'package:loqma/custom_widget/text_from_field_class.dart';
 import 'package:loqma/db/offers_db.dart';
 import 'package:loqma/db/user_db.dart';
@@ -57,8 +58,16 @@ DateTime? selectedDate;
     return Scaffold(
       backgroundColor: ConstantColors.tertiaryColor,
       appBar: AppBar(
+
+        backgroundColor: ConstantColors.tertiaryColor,
         title: Text('Add New Offer',style: ConstantStyle.screentitleStyle,),
         centerTitle: true,
+        actions: [Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CircleAvatar(
+          backgroundColor: Colors.black54,
+          child: CartIcon()),
+      )]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

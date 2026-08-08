@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loqma/provider/offer%20providers/cart_provider.dart';
 import 'package:loqma/provider/update_user_provider.dart';
 import 'package:loqma/screen/bottom_nav_screen.dart';
 import 'package:loqma/screen/login_screen.dart';
@@ -22,6 +23,7 @@ void main() {
       ChangeNotifierProvider(create: (context) =>ExpiredStatusProvider() ,),
       ChangeNotifierProvider(create: (context) =>ReservedStatusProvider() ,),
       ChangeNotifierProvider(create: (context) =>UpdateUserProvider() ,),
+      ChangeNotifierProvider(create: (context)=>CartProvider()),
       ChangeNotifierProvider(create: (context) =>UserTypeProvider() ,),
       ChangeNotifierProvider(create: (context) =>VolunteerTypeProvider() ,),
       ChangeNotifierProvider(create: (context)=>FavoriteOfferProvider())

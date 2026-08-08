@@ -24,21 +24,24 @@ class ProfileOptions extends StatelessWidget {
           height: height/12,
           width: .infinity,
           
-          child: Row(
-            mainAxisAlignment: .spaceBetween,
-            children: [
-              Row(
-                spacing: 10,
-                children: [
-                  Icon(preIcon,color: ConstantColors.secondaryColor),
-                  SizedBox(width: width/20,),
-                  Text(optionTitle,style: ConstantStyle.titeStyle.copyWith(fontWeight: .w600),),
-                ],
-              ),
-              SizedBox(width: width/4,),
-              
-              Icon(Icons.arrow_forward_ios_sharp,)
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) => 
+            Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                Row(
+                  spacing: 10,
+                  children: [
+                    Icon(preIcon,color: ConstantColors.secondaryColor),
+                    SizedBox(width: constraints.maxHeight/20,),
+                    Text(optionTitle,style: ConstantStyle.titeStyle.copyWith(fontWeight: .w600),),
+                  ],
+                ),
+                SizedBox(width: constraints.maxWidth/5,),
+                
+                Icon(Icons.arrow_forward_ios_sharp,)
+              ],
+            ),
           ),
         ),
       ),

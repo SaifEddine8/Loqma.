@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
+import 'package:loqma/custom_widget/cart_icon.dart';
 import 'package:loqma/custom_widget/item_card.dart';
 import 'package:loqma/db/offers_db.dart';
 import 'package:loqma/db/user_db.dart';
@@ -40,12 +41,15 @@ void dispose() {
 final double itemWidth = (screenWidth - 32 - 10) / 2;
 final double requiredItemHeight = 143 + 140;
 final double dynamicAspectRatio = itemWidth / requiredItemHeight;
-    offersNotifier.value=offersNotifier.value.where((item)=>item.expiryDate.isAfter(DateTime.now())).toList();
+    // offersNotifier.value=offersNotifier.value.where((item)=>item.expiryDate.isAfter(DateTime.now())).toList();
+offersNotifier.value.removeWhere(
+  (item) => item.expiryDate.isBefore(DateTime.now())
+);
 
     List<Offer> filterProducts=offersNotifier.value.where((item){
     final filterFromCategory=categoryName=='All'|| item.category==categoryName;
     final filterFromSearch=item.title.toLowerCase().contains(search.toLowerCase());
-    return filterFromCategory && filterFromSearch && item.expiryDate.isAfter(DateTime.now()) ;
+        return filterFromCategory && filterFromSearch && item.expiryDate.isAfter(DateTime.now())&&(currentUser!.type!=.user||item.type==.sale) ;
     
     
     
@@ -59,6 +63,7 @@ final double dynamicAspectRatio = itemWidth / requiredItemHeight;
     
   }
   ).toList();
+  
    return Scaffold(
           backgroundColor: ConstantColors.tertiaryColor,
 
@@ -67,6 +72,12 @@ final double dynamicAspectRatio = itemWidth / requiredItemHeight;
       title: Text('Loqma',style: ConstantStyle.screentitleStyle,),
       centerTitle: true,
       leading: Icon(Icons.notifications),
+      actions: [Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CircleAvatar(
+          backgroundColor: Colors.black54,
+          child: CartIcon()),
+      )],
     ),
     body:Padding(
       padding: const EdgeInsets.all(16),

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/profile_option_model.dart';
 import 'package:loqma/models/user_model.dart';
-import 'package:loqma/screen/profile%20sheet%20screens/change_password_sheet_screen.dart';
+import 'package:loqma/screen/profile%20screens/my_offers_screen.dart';
+import 'package:loqma/screen/profile%20screens/sheets%20screen/change_password_sheet_screen.dart';
 import 'package:loqma/screen/login_screen.dart';
-import 'package:loqma/screen/profile%20sheet%20screens/edit_sheet_screen.dart';
+import 'package:loqma/screen/profile%20screens/sheets%20screen/edit_sheet_screen.dart';
 
 List<ProfileOptionModel>options=[
   
@@ -26,6 +27,12 @@ List<ProfileOptionModel>options=[
       title: 'My Offers',
       icon: Icons.fastfood_outlined,
       onTap: (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyOffersScreen(),
+          ),
+        );
       },
     ),
 

@@ -25,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: ConstantColors.tertiaryColor,
         title: Text('My Profile',style: ConstantStyle.screentitleStyle,),
         centerTitle: true,
+        
       ),
       backgroundColor: ConstantColors.tertiaryColor,
       body: Padding(

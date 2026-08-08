@@ -63,14 +63,12 @@ class FavoriteCard extends StatelessWidget {
                     context.read<FavoriteOfferProvider>().toggleFavorite(item);
             
                   },
-                  child: Consumer<FavoriteOfferProvider>(
-                    builder: (context, value, child) => 
-                    Column(
-                      mainAxisAlignment: .start,
-                      children: [
-                        Icon(value.offers.contains(item)? Icons.favorite:Icons.favorite_border,color: Colors.red,),
-                      ],
-                    )))
+                  child: Column(
+                    mainAxisAlignment: .start,
+                    children: [
+                      Icon( Icons.favorite,color: Colors.red,),
+                    ],
+                  ))
               ],
             ),
           ),

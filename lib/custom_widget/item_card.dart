@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
+import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/db/offers_db.dart';
+import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/provider/offer%20providers/favorite_offer_provider.dart';
+import 'package:loqma/screen/offer_details.dart';
 
 import 'package:provider/provider.dart';
 
@@ -29,7 +32,7 @@ class _ItemCardState extends State<ItemCard> {
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: () {
-          // افتح صفحة التفاصيل
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>OfferDetails(offer: widget.offer,)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,22 +173,14 @@ class _ItemCardState extends State<ItemCard> {
 
                           Text(
                             "${widget.offer.price} JD",
-                            style: TextStyle(
-                              color: ConstantColors.primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
+                            style: ConstantStyle.priceStyle
                           ),
                         ],
                       )
                     else
                       Text(
                         "FREE",
-                        style: TextStyle(
-                          color: ConstantColors.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
+                        style: ConstantStyle.priceStyle
                       ),
                   ],
                 ),
