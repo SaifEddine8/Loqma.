@@ -43,7 +43,7 @@ class _OfferDetailsState extends State<OfferDetails> {
                 ),
               ),
               onPressed: (){
-                if(widget.offer.type==OfferType.sale)context.read<CartProvider>().addToCart(widget.offer);
+                context.read<CartProvider>().addToCart(widget.offer);
               },
               child: Text(
                 widget.offer.type == OfferType.donation
