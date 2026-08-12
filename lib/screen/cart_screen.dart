@@ -210,8 +210,8 @@ class _CartScreenState extends State<CartScreen> {
 
                           const Spacer(),
 
-                          const Text(
-                            '0.50 JD',
+                           Text(
+                            '${cartProvider.tax} JD',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -241,8 +241,8 @@ class _CartScreenState extends State<CartScreen> {
 
                           const Spacer(),
 
-                          const Text(
-                            '11.50 JD',
+                           Text(
+                            '${cartProvider.subTotal+cartProvider.tax} JD',
                             style: TextStyle(
                               fontSize: 19,
                               fontWeight: FontWeight.w800,

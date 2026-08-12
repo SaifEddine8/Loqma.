@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/custom_widget/cart_icon.dart';
+import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
+import 'package:loqma/models/user_model.dart';
 import 'package:loqma/provider/offer%20providers/cart_provider.dart';
+import 'package:loqma/provider/offer%20providers/delivery_provider.dart';
 import 'package:loqma/provider/offer%20providers/favorite_offer_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -32,30 +35,64 @@ class _OfferDetailsState extends State<OfferDetails> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            height: 55,
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ConstantColors.primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+          child: Row(
+            children: [
+              if(widget.offer.type==OfferType.donation&&currentUser!.type==UserType.volunteer)
+              Expanded(
+                child: SizedBox(
+                  height: 55,
+                  width: width/2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ConstantColors.tertiaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    onPressed: (){
+                      context.read<DeliveryProvider>().addToDelivery(widget.offer);
+                    },
+                    child: Text(
+                      
+                           "Reserve Now",
+                      style:  TextStyle(
+                        color: ConstantColors.primaryColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              onPressed: (){
-                context.read<CartProvider>().addToCart(widget.offer);
-              },
-              child: Text(
-                widget.offer.type == OfferType.donation
-                    ? "Reserve Now"
-                    : "ADD TO CART",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              SizedBox(width: 8,),
+              
+              Expanded(
+                child: SizedBox(
+                  height: 55,
+                  width: width/2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ConstantColors.primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    onPressed: (){
+                      context.read<CartProvider>().addToCart(widget.offer);
+                    },
+                    child: Text(
+                      
+                          "ADD TO CART",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

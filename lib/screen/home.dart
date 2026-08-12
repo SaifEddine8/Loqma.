@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/custom_widget/cart_icon.dart';
+import 'package:loqma/custom_widget/delivery_icon.dart';
 import 'package:loqma/custom_widget/item_card.dart';
 import 'package:loqma/db/offers_db.dart';
 import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
+import 'package:loqma/models/user_model.dart';
+import 'package:loqma/provider/update_user_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -72,12 +76,22 @@ offersNotifier.value.removeWhere(
       title: Text('Loqma',style: ConstantStyle.screentitleStyle,),
       centerTitle: true,
       leading: Icon(Icons.notifications),
-      actions: [Padding(
+      actions: [
+        Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CircleAvatar(
           backgroundColor: Colors.black54,
           child: CartIcon()),
-      )],
+      ),
+      context.read<UpdateUserProvider>().currentUser!.type==UserType.volunteer? Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CircleAvatar(
+          backgroundColor: Colors.black54,
+          child: DeliveryIcon()),
+      ):Text(''),
+
+      
+      ],
     ),
     body:Padding(
       padding: const EdgeInsets.all(16),

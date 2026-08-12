@@ -3,14 +3,17 @@ import 'package:loqma/models/cart_item_model.dart';
 import 'package:loqma/models/offer_model.dart';
 
 class CartProvider with ChangeNotifier{
-  final List<Offer> _offers=[];
-  int qu=1;
+final Map<Offer, int> _cartItems = {};  
   double subTotal=0.0;
-  List<Offer> get offers=>_offers;
+  double tax=0.0.roundToDouble();
+  List<Offer> get offers=>_cartItems.keys.toList();
 
+  int getQuantity(Offer offer){
+    return _cartItems[offer]??1;
+  }
   void addToCart(Offer offer){
-    if(!_offers.contains(offer))
-    {_offers.add(offer);
+    if(!_cartItems.containsKey(offer))
+    {_cartItems[offer]=1;
     sum();
     }
     notifyListeners();
@@ -18,9 +21,9 @@ class CartProvider with ChangeNotifier{
   
   void removeFromCart(Offer offer)
   {
-    if(_offers.contains(offer))
+    if(_cartItems.containsKey(offer))
     {
-      _offers.remove(offer);
+      _cartItems.remove(offer);
       sum();
       
     }
@@ -29,14 +32,16 @@ class CartProvider with ChangeNotifier{
 
 
 
-    void increament(){
-      qu++;
+    void increament(Offer offer){
+      _cartItems[offer]=_cartItems[offer]!+1;
+      sum();
       notifyListeners();
     }
 
-    void decreament(){
-      if(qu>1)
-      qu--;
+    void decreament(Offer offer){
+      if(_cartItems[offer]!>1)
+      _cartItems[offer]=_cartItems[offer]!-1;
+      sum();
       notifyListeners();
     }
 
@@ -44,14 +49,18 @@ class CartProvider with ChangeNotifier{
 
     void sum(){
       
-      subTotal=_offers.fold<double>(
+      subTotal=_cartItems.entries.fold<double>(
   0,
-  (sum, item) =>item.type==OfferType.donation?sum+0: (sum + item.price!)*5,
+  (sum, item) =>item.key.type==OfferType.donation?sum+0: sum + (item.key.price!*item.value),
 
   
 );
+tax=subTotal*0.05;
+
 notifyListeners();
 
     }
+    
+
   
 }

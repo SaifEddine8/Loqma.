@@ -51,7 +51,7 @@ class _EditSheetScreenState extends State<EditSheetScreen> {
                         return Utils.checkUsername(value)?null:'invalid username';
                       
                       } 
-                      ,hint: currentUser!.fullName,),
+                      ,hint: userProvider.currentUser!.fullName,),
                     TextFromFieldClass(controller: emailController,validator: (value) {
                       if(value==null||value.isEmpty)
                       {
@@ -61,7 +61,7 @@ class _EditSheetScreenState extends State<EditSheetScreen> {
                         return Utils.checkEmail(value)?null:'invalid email';
                       
                       }
-                      ,hint: currentUser!.email,sufIcon: Icon(Icons.email),),
+                      ,hint: userProvider.currentUser!.email,sufIcon: Icon(Icons.email),),
                     TextFromFieldClass(controller: phoneController,validator: (value) {
                       if(value==null||value.isEmpty)
                       {
@@ -71,7 +71,7 @@ class _EditSheetScreenState extends State<EditSheetScreen> {
                         return Utils.checkPhone(value)?null:'invalid phone';
                       
                       }
-                       ,hint: currentUser!.phone,),
+                       ,hint: userProvider.currentUser!.phone,),
                     TextFormField(
                       controller: addressController,
                       readOnly: true,
@@ -93,7 +93,7 @@ class _EditSheetScreenState extends State<EditSheetScreen> {
                           borderRadius: BorderRadius.circular(20)
                         ),
                         
-                          hintText: selectedAddress==null? currentUser!.location!.address:addressController.text,
+                          hintText: selectedAddress==null? userProvider.currentUser!.location!.address:addressController.text,
                           prefixIcon: Icon(Icons.location_on),
                           suffixIcon: Icon(Icons.arrow_drop_down)
                       ),
