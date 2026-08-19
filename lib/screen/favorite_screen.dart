@@ -13,84 +13,83 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider=context.watch<FavoriteOfferProvider>();
+    final provider = context.watch<FavoriteOfferProvider>();
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: CircleAvatar(
-                      radius: 40,
-                      backgroundImage: currentUser!.profileImage != null
-                          ? FileImage(currentUser!.profileImage!)
-                          : null,
-                      child: currentUser!.profileImage == null
-                          ? const Icon(Icons.person)
-                          : null,
-                    ),
-        ),
-                  title: ListTile(
-                    title: Text(currentUser!.fullName,style: ConstantStyle.screentitleStyle.copyWith(color: Colors.black,),),
-                    subtitle: Text(currentUser!.email),
-                    
-                  ),
-        backgroundColor: ConstantColors.tertiaryColor,
-        actions: [Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CircleAvatar(
-          backgroundColor: Colors.black54,
-          child: CartIcon()),
-      )],
-      centerTitle: true,
-      ),
-      backgroundColor: ConstantColors.tertiaryColor,
-      body: provider.offers.length==0?Center(
-        child: Text('No Data'),
-      ): Padding(
-        padding: const EdgeInsets.all(16),
-        child: SafeArea(
-          child: Column(
-            spacing: 10,
-            children: [
-              // Row(
-              //   children: [
-              //     CircleAvatar(
-              //       radius: 40,
-              //       backgroundImage: currentUser!.profileImage != null
-              //           ? FileImage(currentUser!.profileImage!)
-              //           : null,
-              //       child: currentUser!.profileImage == null
-              //           ? const Icon(Icons.person)
-              //           : null,
-              //     ),
-              //     Expanded(
-              //       child: ListTile(
-              //         title: Text(currentUser!.fullName,style: ConstantStyle.screentitleStyle.copyWith(color: Colors.black,),),
-              //         subtitle: Text(currentUser!.email),
-                      
-              //       ),
-              //     )
-              //   ],
-              // ),
-              Expanded(
-                child: ListView.builder(
-                  
-                  itemCount: provider.offers.length,
-                  itemBuilder: (context,index){
-                    
-                        // print(item.title);
-                
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FavoriteCard(item: provider.offers[index],),
-                    );              
-                
-                  }
-                  ),
-              )
-            ],
+            radius: 40,
+            backgroundImage: currentUser!.profileImage != null
+                ? FileImage(currentUser!.profileImage!)
+                : null,
+            child: currentUser!.profileImage == null
+                ? const Icon(Icons.person)
+                : null,
           ),
         ),
+        title: ListTile(
+          title: Text(
+            currentUser!.fullName,
+            style: ConstantStyle.screentitleStyle.copyWith(color: Colors.black),
+          ),
+          subtitle: Text(currentUser!.email),
+        ),
+        backgroundColor: ConstantColors.tertiaryColor,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: CartIcon(),
+          ),
+        ],
+        centerTitle: true,
       ),
+      backgroundColor: ConstantColors.tertiaryColor,
+      body: provider.offers.length == 0
+          ? Center(child: Text('No Data'))
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: SafeArea(
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    // Row(
+                    //   children: [
+                    //     CircleAvatar(
+                    //       radius: 40,
+                    //       backgroundImage: currentUser!.profileImage != null
+                    //           ? FileImage(currentUser!.profileImage!)
+                    //           : null,
+                    //       child: currentUser!.profileImage == null
+                    //           ? const Icon(Icons.person)
+                    //           : null,
+                    //     ),
+                    //     Expanded(
+                    //       child: ListTile(
+                    //         title: Text(currentUser!.fullName,style: ConstantStyle.screentitleStyle.copyWith(color: Colors.black,),),
+                    //         subtitle: Text(currentUser!.email),
+
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: provider.offers.length,
+                        itemBuilder: (context, index) {
+                          // print(item.title);
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FavoriteCard(item: provider.offers[index]),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }
