@@ -3,6 +3,8 @@ import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/custom_widget/cart_card_screen.dart';
 import 'package:loqma/provider/offer providers/cart_provider.dart';
+import 'package:loqma/provider/update_user_provider.dart';
+import 'package:loqma/screen/checkout_screen.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -30,7 +32,7 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
 
-      body: cartProvider.offers.isEmpty
+      body: cartProvider.cartItems.isEmpty
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -99,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
                       const Spacer(),
 
                       Text(
-                        '${cartProvider.offers.length} items',
+                        '${cartProvider.cartItems.length} items',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -118,11 +120,11 @@ class _CartScreenState extends State<CartScreen> {
                       16,
                       20,
                     ),
-                    itemCount: cartProvider.offers.length,
+                    itemCount: cartProvider.cartItems.length,
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 14),
                       child: CartCardScreen(
-                        offer: cartProvider.offers[index],
+                        offer: cartProvider.cartItems[index],
                       ),
                     ),
                   ),
@@ -163,7 +165,7 @@ class _CartScreenState extends State<CartScreen> {
                           const Spacer(),
 
                           Text(
-                            '${cartProvider.offers.length} items',
+                            '${cartProvider.cartItems.length} items',
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey.shade600,
@@ -258,6 +260,7 @@ class _CartScreenState extends State<CartScreen> {
                         height: 54,
                         child: ElevatedButton(
                           onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: ((context) => CheckoutScreen(currentUserId: context.read<UpdateUserProvider>().currentUser!.id.toString(),))));
                             // Navigate to payment screen
                           },
                           style: ElevatedButton.styleFrom(

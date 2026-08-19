@@ -9,6 +9,8 @@ import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/models/user_model.dart';
 import 'package:loqma/provider/update_user_provider.dart';
+import 'package:loqma/screen/notification_screen.dart';
+import 'package:loqma/screen/waiting_offer_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -53,7 +55,7 @@ offersNotifier.value.removeWhere(
     List<Offer> filterProducts=offersNotifier.value.where((item){
     final filterFromCategory=categoryName=='All'|| item.category==categoryName;
     final filterFromSearch=item.title.toLowerCase().contains(search.toLowerCase());
-        return filterFromCategory && filterFromSearch && item.expiryDate.isAfter(DateTime.now())&&(currentUser!.type!=.user||item.type==.sale) ;
+        return filterFromCategory && filterFromSearch && item.expiryDate.isAfter(DateTime.now())&&item.quantity>0 ;
     
     
     
@@ -72,10 +74,27 @@ offersNotifier.value.removeWhere(
           backgroundColor: ConstantColors.tertiaryColor,
 
     appBar: AppBar(
+      
       backgroundColor: ConstantColors.tertiaryColor,
       title: Text('Loqma',style: ConstantStyle.screentitleStyle,),
       centerTitle: true,
-      leading: Icon(Icons.notifications),
+      leadingWidth: 80,
+      leading: Row(
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          InkWell(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ReceiptsHistoryScreen(currentUserId: context.read<UpdateUserProvider>().currentUser!.id.toString(),))),
+            child: Icon(Icons.notifications)),
+
+            if(context.watch<UpdateUserProvider>().currentUser?.type==UserType.volunteer)
+            InkWell(
+              onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>WaitingOfferScreen())),
+              child: 
+              Icon(Icons.approval)
+              )
+              
+        ],
+      ),
       actions: [
         Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -83,7 +102,7 @@ offersNotifier.value.removeWhere(
           backgroundColor: Colors.black54,
           child: CartIcon()),
       ),
-      context.read<UpdateUserProvider>().currentUser!.type==UserType.volunteer? Padding(
+      context.watch<UpdateUserProvider>().currentUser!.type==UserType.volunteer? Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CircleAvatar(
           backgroundColor: Colors.black54,

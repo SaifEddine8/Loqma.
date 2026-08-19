@@ -22,6 +22,7 @@ class PersonModel {
     required this.password,
      this.location,
       this.profileImage,
-  }):id=++counter;
+      int?id
+  }):id=id??++counter;
 
 }

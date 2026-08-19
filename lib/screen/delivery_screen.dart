@@ -3,8 +3,10 @@ import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/custom_widget/cart_card_screen.dart';
 import 'package:loqma/custom_widget/delivery_card.dart';
+import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/provider/offer providers/cart_provider.dart';
 import 'package:loqma/provider/offer%20providers/delivery_provider.dart';
+import 'package:loqma/provider/update_user_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class DeliveryScreen extends StatefulWidget {
 class _DeliveryScreenState extends State<DeliveryScreen> {
   @override
   Widget build(BuildContext context) {
+    
     final deliveryProvider = context.watch<DeliveryProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFF8F8F8),
@@ -124,11 +127,11 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 14),
                       child: DeliveryCard(
-                        offer: deliveryProvider.offers[index],
+                        offer: deliveryProvider.offers[index]),
                       ),
                     ),
                   ),
-                ),
+                
 
                 
               ],

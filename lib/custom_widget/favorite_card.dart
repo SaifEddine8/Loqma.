@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
+import 'package:loqma/custom_widget/offer_image.dart';
 import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/models/user_model.dart';
@@ -35,7 +36,7 @@ class FavoriteCard extends StatelessWidget {
                 Container(
                   height: constraints.maxHeight/1.5,
                   
-                  child: Image.network(item.image,)),
+                  child: OfferImage(imagePath: item.image,fit: .cover,height:constraints.maxHeight/1.5 ,width:constraints.maxWidth/3 ,)),
                 Column(
                   mainAxisAlignment: .spaceBetween,
                   children: [

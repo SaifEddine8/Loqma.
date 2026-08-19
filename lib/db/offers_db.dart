@@ -154,11 +154,17 @@ final  ValueNotifier<List<Offer>> offersNotifier = ValueNotifier<List<Offer>>([
   ),]);
 
 
-List<Offer> offers = [
-  
-];
+void updateOfferQuantityInDB({updatedOffer}) {
+  List<Offer> currentList = List.from(offersNotifier.value);
 
+  int index = currentList.indexWhere((element) => element.id == updatedOffer.id);
 
+  if (index != -1) {
+    currentList[index] = updatedOffer;
+
+    offersNotifier.value = currentList;
+  }
+}
 
 
 

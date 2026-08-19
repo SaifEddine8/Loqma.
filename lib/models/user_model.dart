@@ -21,6 +21,7 @@ class UserModel extends PersonModel{
     required super.password,
      super.location,
       super.profileImage,
+      super.id,
       this.type=UserType.user,
     this.donations = const [],
   });

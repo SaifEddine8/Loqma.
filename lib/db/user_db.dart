@@ -21,7 +21,7 @@ List<UserModel> users=[UserModel(
     longitude: 35.8500,
   ),
     donations: [],
-    type:.user
+    type:.volunteer
   ),
 
   UserModel(

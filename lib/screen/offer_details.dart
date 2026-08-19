@@ -1,13 +1,17 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
 import 'package:loqma/custom_widget/cart_icon.dart';
+import 'package:loqma/custom_widget/offer_image.dart';
+import 'package:loqma/db/offers_db.dart';
 import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/models/user_model.dart';
 import 'package:loqma/provider/offer%20providers/cart_provider.dart';
 import 'package:loqma/provider/offer%20providers/delivery_provider.dart';
 import 'package:loqma/provider/offer%20providers/favorite_offer_provider.dart';
+import 'package:loqma/provider/update_user_provider.dart';
 import 'package:provider/provider.dart';
 
 
@@ -28,6 +32,7 @@ class _OfferDetailsState extends State<OfferDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.read<UpdateUserProvider>(); 
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -37,7 +42,7 @@ class _OfferDetailsState extends State<OfferDetails> {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              if(widget.offer.type==OfferType.donation&&currentUser!.type==UserType.volunteer)
+              if(widget.offer.type==OfferType.donation&&userProvider.currentUser!.type==UserType.volunteer)
               Expanded(
                 child: SizedBox(
                   height: 55,
@@ -49,9 +54,14 @@ class _OfferDetailsState extends State<OfferDetails> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    onPressed: (){
-                      context.read<DeliveryProvider>().addToDelivery(widget.offer);
-                    },
+                    onPressed: () {
+  updateOfferQuantityInDB(
+    updatedOffer: widget.offer.copyWith(
+      volunteerId: userProvider.currentUser!.id, 
+    ),
+  );
+  context.read<DeliveryProvider>().addToDelivery(widget.offer,volunteerId: userProvider.currentUser!.id); 
+},
                     child: Text(
                       
                            "Reserve Now",
@@ -103,18 +113,19 @@ class _OfferDetailsState extends State<OfferDetails> {
             Stack(
               children: [
                 Hero(
-                  tag: widget.offer.id,
+                  tag: widget.offer.id!,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
-                    child: Image.network(
-                      widget.offer.image,
-                      width: width,
-                      height: height * 0.45,
-                      fit: BoxFit.cover,
-                    ),
+                     child:OfferImage(imagePath: widget.offer.image,fit: .cover,height:height * 0.45 ,width: width,)
+                    // Image.network(
+                    //   widget.offer.image,
+                    //   width: width,
+                    //   height: height * 0.45,
+                    //   fit: BoxFit.cover,
+                    // ),
                   ),
                 ),
                 Container(
@@ -417,4 +428,53 @@ class _OfferDetailsState extends State<OfferDetails> {
       ],
     );
   }
+
+
+
+  Widget _buildOfferImage(String imagePath) {
+  final String path = imagePath.trim();
+
+  // 1. إذا كان رابط شبكة عادي
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return Image.network(
+      path,
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.45,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => _imagePlaceholder(),
+    );
+  }
+
+  // 2. إذا كان ملف محلي على الهاتف
+  final cleanPath = path.startsWith('file://') 
+      ? path.replaceFirst('file://', '') 
+      : path;
+  final file = File(cleanPath);
+
+  if (file.existsSync()) {
+    return Image.file(
+      file,
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.45,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => _imagePlaceholder(),
+    );
+  }
+
+  // 3. في حال لم يجد الصورة
+  return _imagePlaceholder();
 }
+
+Widget _imagePlaceholder() {
+  return Container(
+    width: double.infinity,
+    height: MediaQuery.of(context).size.height * 0.45,
+    color: Colors.grey.shade300,
+    child: const Icon(Icons.fastfood, size: 60, color: Colors.grey),
+  );
+}
+}
+
+
+
+

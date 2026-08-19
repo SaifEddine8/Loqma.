@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loqma/constant/constant_colors.dart';
 import 'package:loqma/constant/constant_style.dart';
+import 'package:loqma/custom_widget/offer_image.dart';
 import 'package:loqma/db/offers_db.dart';
 import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
@@ -24,6 +25,8 @@ class ItemCard extends StatefulWidget {
 class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
+    final height= MediaQuery.of(context).size.height;
+    final width= MediaQuery.of(context).size.width;
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -48,12 +51,13 @@ class _ItemCardState extends State<ItemCard> {
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(18),
                     ),
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrOjwDT1psaP5bz_sw0Le14wmWViiyRytwJY-529Atyg&s=10',
-                      // height: MediaQuery.of(context).size.height/5.5,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    child: OfferImage(imagePath: widget.offer.image,fit: .cover,height:height/5.5 ,width: width,)
+                    // Image.network(
+                    //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrOjwDT1psaP5bz_sw0Le14wmWViiyRytwJY-529Atyg&s=10',
+                    //   // height: MediaQuery.of(context).size.height/5.5,
+                    //   width: double.infinity,
+                    //   fit: BoxFit.cover,
+                    // ),
                   ),
               
                   Positioned(
@@ -75,7 +79,7 @@ class _ItemCardState extends State<ItemCard> {
                           child: Consumer<FavoriteOfferProvider>(
                             builder: (context, value, child) => 
                             Icon(
-                              value.offers.contains(widget.offer)? Icons.favorite:Icons.favorite_border,
+                              value.isFavorite(widget.offer)? Icons.favorite:Icons.favorite_border,
                               size: 18,
                               color: Colors.red,
                             ),
