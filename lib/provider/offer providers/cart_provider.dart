@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loqma/db/offers_db.dart';
+import 'package:loqma/models/notification_model.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/models/order_model.dart';
 import 'package:loqma/models/user_model.dart'; 
+import 'package:loqma/services/local_notification_services.dart';
 
 class CartProvider with ChangeNotifier {
   final Map<String, Map<Offer, int>> _userCarts = {}; 
@@ -12,6 +14,9 @@ class CartProvider with ChangeNotifier {
 
   double subTotal = 0.0;
   double tax = 0.0;
+
+  // Getter للوصول إلى كافة الطلبات
+  List<OrderModel> get allOrders => _allOrders;
 
   Map<Offer, int> get _currentCart {
     final activeId = _currentUserId ?? "guest_user";
@@ -100,79 +105,97 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // -------------------------------------------------------------
+  // ⚡ عملية الـ Checkout
+  // -------------------------------------------------------------
   OrderModel? processCheckout({
-  required UserModel currentUser,
-  required List<UserModel> allUsers,
-}) {
-  if (_currentCart.isEmpty) {
-    print(" Checkout failed: Cart is empty.");
-    return null;
+    required UserModel currentUser,
+  }) {
+    if (_currentCart.isEmpty) {
+      print("Checkout failed: Cart is empty.");
+      return null;
+    }
+
+    // 1. خصم الكميات المتاحة من العروض
+    for (var entry in _currentCart.entries) {
+      Offer cartOffer = entry.key;
+      int requestedQty = entry.value;
+
+      int index = offersNotifier.value.indexWhere((o) => o.id == cartOffer.id);
+      if (index != -1) {
+        int currentStock = offersNotifier.value[index].quantity;
+        int newStock = (currentStock - requestedQty).clamp(0, currentStock);
+
+        offersNotifier.value[index] = offersNotifier.value[index].copyWith(quantity: newStock);
+      }
+    }
+
+    offersNotifier.value = List.from(offersNotifier.value);
+
+    // 2. إنشاء الطلب بالحالة الأولية "in preparation"
+    OrderModel receipt = OrderModel(
+      orderId: DateTime.now().millisecondsSinceEpoch.toString().substring(5),
+      userId: currentUser.id.toString(),
+      userName: currentUser.fullName ?? 'Customer',
+      userPhone: currentUser.phone ?? 'N/A',
+      userAddress: currentUser.location?.address ?? 'Amman, Jordan',
+      orderedItems: Map.from(_currentCart),
+      totalPrice: total,
+      orderDate: DateTime.now(),
+      status: "in preparation", // 👈 لتوحيد النصوص مع OrderDetailsScreen
+      volunteerId: null,
+      volunteerName: null,
+      volunteerPhone: null,
+    );
+
+    _allOrders.add(receipt);
+
+    // 3. استدعاء الإشعارات
+    LocalNotificationService.createOrderNotifications(order: receipt);
+
+    // 4. تفريغ السلة
+    _currentCart.clear();
+    subTotal = 0.0;
+    tax = 0.0;
+    notifyListeners();
+
+    return receipt;
   }
 
-  String userAddress = currentUser.location?.address.trim().toLowerCase() ?? '';
-
-  List<UserModel> localVolunteers = allUsers.where((user) {
-    bool isVolunteer = user.type == UserType.volunteer;
-    bool isNotSelf = user.id != currentUser.id;
-
-    String volunteerAddress = user.location?.address.trim().toLowerCase() ?? '';
-
-    bool isSameCity = userAddress.isNotEmpty &&
-        volunteerAddress.isNotEmpty &&
-        (userAddress.contains(volunteerAddress) || volunteerAddress.contains(userAddress));
-
-    return isVolunteer && isNotSelf && isSameCity;
-  }).toList();
-
-  if (localVolunteers.isEmpty) {
-    print(" No exact city match for: '$userAddress'. Finding any available volunteer...");
-    localVolunteers = allUsers.where((user) => user.type == UserType.volunteer && user.id != currentUser.id).toList();
+  // 1️⃣ جلب الطلبات المعلقة المتوفرة للمتطوعين للاختيار منها
+  List<OrderModel> getAvailableOrdersForVolunteers() {
+    return _allOrders.where((order) => order.volunteerId == null && order.status.toLowerCase() == "pending").toList();
   }
 
-  if (localVolunteers.isEmpty) {
-    print(" No volunteers found in the entire system!");
-    return null;
+  // 2️⃣ جلب الطلبات التي وافق هذا المتطوع على توصيلها
+  List<OrderModel> getMyAcceptedDeliveries(String volunteerId) {
+    return _allOrders.where((order) => order.volunteerId == volunteerId).toList();
   }
 
-  localVolunteers.shuffle();
-  UserModel assignedVolunteer = localVolunteers.first;
-  print(" Volunteer Assigned: ${assignedVolunteer.fullName} (ID: ${assignedVolunteer.id})");
+  // 3️⃣ قبول المتطوع للطلب
+  void acceptOrder({
+    required OrderModel order,
+    required String volunteerId,
+    required String volunteerName,
+    required String volunteerPhone,
+  }) {
+    order.volunteerId = volunteerId;
+    order.volunteerName = volunteerName;
+    order.volunteerPhone = volunteerPhone;
+    order.status = "in preparation";
 
-  for (var entry in _currentCart.entries) {
-    Offer cartOffer = entry.key;
-    int requestedQty = entry.value;
+    LocalNotificationService.createOrderNotifications(order: order);
 
-    int index = offersNotifier.value.indexWhere((o) => o.id == cartOffer.id);
+    notifyListeners();
+  }
+
+  // 4️⃣ تحديث حالة الطلب المصححة
+  void updateOrderStatus(String orderId, String newStatus) {
+    // 👈 تم التصحيح هنا لاستخدام _allOrders بدلاً من _myOrders
+    final index = _allOrders.indexWhere((o) => o.orderId == orderId);
     if (index != -1) {
-      int currentStock = offersNotifier.value[index].quantity;
-      int newStock = (currentStock - requestedQty).clamp(0, currentStock);
-
-      offersNotifier.value[index] = offersNotifier.value[index].copyWith(quantity: newStock);
+      _allOrders[index].status = newStatus;
+      notifyListeners();
     }
   }
-
-  offersNotifier.value = List.from(offersNotifier.value);
-
-  OrderModel receipt = OrderModel(
-    orderId: DateTime.now().millisecondsSinceEpoch.toString().substring(5),
-    userId: currentUser.id.toString(),
-    orderedItems: Map.from(_currentCart),
-    subTotal: subTotal,
-    tax: tax,
-    totalPrice: total,
-    orderDate: DateTime.now(),
-    volunteerId: assignedVolunteer.id.toString(),
-    volunteerName: assignedVolunteer.fullName,
-    volunteerPhone: assignedVolunteer.phone,
-  );
-
-  _allOrders.add(receipt);
-
-  _currentCart.clear();
-  subTotal = 0.0;
-  tax = 0.0;
-  notifyListeners();
-
-  return receipt;
-}
 }

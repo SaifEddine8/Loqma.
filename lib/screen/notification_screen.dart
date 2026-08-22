@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loqma/db/user_db.dart';
 import 'package:loqma/provider/offer%20providers/delivery_provider.dart';
+import 'package:loqma/screen/order_details_screen.dart';
+import 'package:loqma/services/local_notification_services.dart';
 import 'package:provider/provider.dart';
 import 'package:loqma/provider/offer%20providers/cart_provider.dart';
 import 'package:loqma/models/order_model.dart';
@@ -28,14 +30,12 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    final deliveryProvider = Provider.of<DeliveryProvider>(context);
 
     final myOrders = cartProvider.getMyOrders(widget.currentUserId);
-    final deliveryNotifications = deliveryProvider.notifications;
-
+    final userNotifications = LocalNotificationService.getNotificationsForUser(widget.currentUserId);
     final List<dynamic> combinedList = [
       ...myOrders,
-      ...deliveryNotifications,
+      ...userNotifications,
     ];
 
     combinedList.sort((a, b) {
@@ -61,6 +61,7 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
               itemBuilder: (context, index) {
                 final item = combinedList[index];
 
+                // 🔔 1. عرض الإشعارات
                 if (item is NotificationModel) {
                   bool isFine = item.penaltyAmount != null && item.penaltyAmount! > 0;
 
@@ -88,10 +89,30 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                         '${item.message}\nDate: ${item.date.toString().substring(0, 16)}',
                         style: const TextStyle(height: 1.4),
                       ),
+                      trailing: item.order != null 
+                          ? const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey)
+                          : null,
+                          
+                      // ⚡ ⚡ الربط الجديد المفكوك: نقل المتطوع لشاشة التفاصيل عند الضغط على الإشعار ⚡ ⚡
+                      onTap: () {
+                        if (item.order != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OrderDetailsScreen(order: item.order!),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('No details available for this notification')),
+                          );
+                        }
+                      },
                     ),
                   );
                 }
 
+                // 🧾 2. عرض الفواتير والطلبات
                 final order = item as OrderModel;
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -195,6 +216,12 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                     final quantity = entry.value;
                     double itemTotal = (offer.price ?? 0) * quantity;
 
+                    // ⚡ البحث عن صاحب العرض آمن وبدون استخدام ownerId المفقود
+                    final ownerUser = users.firstWhere(
+                      (u) => u.id == offer.volunteerId,
+                      orElse: () => users.first,
+                    );
+
                     return Container(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       padding: const EdgeInsets.all(10),
@@ -227,7 +254,7 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Offered by: ${users.firstWhere((user) => user.id == offer.ownerId)?.fullName ?? "Restaurant"}',
+                            'Offered by: ${ownerUser.fullName}', // 👈 اسم صاحب العرض
                             style: TextStyle(fontSize: 12, color: Colors.grey.shade700, fontStyle: FontStyle.italic),
                           ),
                         ],

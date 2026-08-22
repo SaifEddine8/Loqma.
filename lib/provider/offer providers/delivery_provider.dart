@@ -3,21 +3,19 @@ import 'package:loqma/db/offers_db.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/models/order_model.dart';
 import 'package:loqma/models/notification_model.dart';
+import 'package:loqma/services/local_notification_services.dart';
 
 class DeliveryProvider with ChangeNotifier {
   final Map<Offer, int> _deliveryItems = {}; 
   final Map<Offer, String> _itemStatuses = {};
   final Map<Offer, int> _completedDeliveries = {};
   final Map<Offer, DateTime> _reservationDates = {};
-  final List<NotificationModel> _notifications = [];
 
   double subTotal = 0.0;
   double tax = 0.0;
 
   List<Offer> get offers => _deliveryItems.keys.toList();
   List<Offer> get completedOffers => _completedDeliveries.keys.toList();
-  
-  List<NotificationModel> get notifications => List.unmodifiable(_notifications);
 
   int getQuantity(Offer offer) {
     Offer keyOffer = _getExistingKey(offer);
@@ -53,7 +51,6 @@ class DeliveryProvider with ChangeNotifier {
     _deliveryItems.clear();
     _itemStatuses.clear();
     _completedDeliveries.clear();
-    _notifications.clear();
     subTotal = 0.0;
     tax = 0.0;
     notifyListeners();
@@ -182,25 +179,11 @@ class DeliveryProvider with ChangeNotifier {
       _itemStatuses.remove(keyOffer);
 
       if (receiptOrder != null) {
-        addReceiptNotification(receiptOrder);
+        LocalNotificationService.createOrderNotifications(order: receiptOrder);
       }
     }
 
     notifyListeners(); 
-  }
-
-  void addReceiptNotification(OrderModel order) {
-    _notifications.insert(
-      0,
-      NotificationModel(
-        id: order.orderId,
-        title: "Delivery Receipt",
-        message: "Order #${order.orderId} has been successfully delivered.",
-        date: order.orderDate,
-        order: order,
-      ),
-    );
-    notifyListeners();
   }
 
   Future<void> checkAndApplyExpiredPenalties(String userId) async {
@@ -234,15 +217,10 @@ class DeliveryProvider with ChangeNotifier {
         reason: "Failed to pick up item before expiration: ${offer.title}",
       );
 
-      _notifications.insert(
-        0,
-        NotificationModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          title: "Fine Applied",
-          message: "A penalty fee of $penalty JOD was charged for failing to pick up: ${offer.title}.",
-          date: DateTime.now(),
-          penaltyAmount: penalty,
-        ),
+      LocalNotificationService.addPenaltyNotification(
+        userId: userId,
+        penaltyAmount: penalty,
+        offerTitle: offer.title,
       );
     }
 
@@ -254,7 +232,7 @@ class DeliveryProvider with ChangeNotifier {
   Future<void> addPenaltyToUserInDB({
     required String userId, 
     required double penaltyAmount, 
-    required String reason
+    required String reason,
   }) async {
     print("Penalty registered for $userId: $penaltyAmount JOD");
   }

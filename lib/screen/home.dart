@@ -9,6 +9,7 @@ import 'package:loqma/db/user_db.dart';
 import 'package:loqma/models/offer_model.dart';
 import 'package:loqma/models/user_model.dart';
 import 'package:loqma/provider/update_user_provider.dart';
+import 'package:loqma/screen/available_orders_screen.dart';
 import 'package:loqma/screen/notification_screen.dart';
 import 'package:loqma/screen/waiting_offer_screen.dart';
 import 'package:provider/provider.dart';
@@ -178,7 +179,35 @@ offersNotifier.value.removeWhere(
             ],
         ),
       ),
-    )
+    ),
+
+
+    floatingActionButton: context.watch<UpdateUserProvider>().currentUser?.type == UserType.volunteer
+    ? FloatingActionButton.extended(
+        onPressed: () {
+          final currentUser = context.read<UpdateUserProvider>().currentUser;
+          if (currentUser != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AvailableOrdersScreen(
+                  currentVolunteerId: currentUser.id.toString(),
+                ),
+              ),
+            );
+          }
+        },
+        backgroundColor: ConstantColors.primaryColor,
+        icon: const Icon(Icons.delivery_dining, color: Colors.white),
+        label: const Text(
+          'Pending Orders', // 👈 يعبر عن الطلبات المعلقة المتوفرة للتوصيل
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      )
+    : null,
    );
     
   }

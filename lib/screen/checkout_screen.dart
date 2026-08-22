@@ -173,7 +173,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                             OrderModel? completedOrder = cartProvider.processCheckout(
                               currentUser: context.read<UpdateUserProvider>().currentUser!,
-                              allUsers: users
                             );
                             
                             if (completedOrder != null) {
