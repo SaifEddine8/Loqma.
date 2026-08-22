@@ -9,11 +9,13 @@ class DeliveryIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()  
-      {
-        
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen()));
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DeliveryScreen()),
+        );
       },
-      child: Icon(Icons.delivery_dining,color: Colors.white,));
+      child: Icon(Icons.delivery_dining, color: Colors.black),
+    );
   }
-  }
+}
