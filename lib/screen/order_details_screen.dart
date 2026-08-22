@@ -35,7 +35,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 📍 1. عرض الحالة الحالية للطلب
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -60,7 +59,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ),
             const SizedBox(height: 20),
 
-            // 🏬 2. معلومات مكان الاستلام (Pickup)
             const Text(
               'Pickup Location (Restaurant / Donor):',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -94,7 +92,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ),
             const SizedBox(height: 20),
 
-            // 👤 3. معلومات المستلم والعنوان
             const Text(
               'Customer & Delivery Location:',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -130,7 +127,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ),
             const SizedBox(height: 20),
 
-            // 🍔 4. الوجبات المطلوبة
             const Text(
               'Order Items Summary:',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -159,8 +155,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ),
             const SizedBox(height: 30),
 
-            // ⚡⚡⚡ 5. المـكـــان الـذي تتـغـيـر فـيـه الـحـالـة ⚡⚡⚡
-            // هذا هو الزر التفاعلي الذي يغير حالة الطلب عند الضغط عليه
             _buildActionButton(context),
             const SizedBox(height: 20),
           ],
@@ -169,11 +163,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     );
   }
 
-  // 🔘 الميثود التي تبني الزر وتحدد ماذا يحدث عند الكبس عليه
   Widget _buildActionButton(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
-    // الحالة 1: الطلب "in preparation" -> الكبسة تحوله إلى "delivering"
     if (currentStatus.toLowerCase() == 'in preparation') {
       return SizedBox(
         width: double.infinity,
@@ -192,7 +184,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         ),
       );
     } 
-    // الحالة 2: الطلب "delivering" -> الكبسة تحوله إلى "delivered"
     else if (currentStatus.toLowerCase() == 'delivering') {
       return SizedBox(
         width: double.infinity,
@@ -211,7 +202,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         ),
       );
     } 
-    // الحالة 3: الطلب "delivered" مكتمل -> يظهر شريط تأكيد الإكمال بدون كبسة
     else if (currentStatus.toLowerCase() == 'delivered') {
       return Container(
         width: double.infinity,
@@ -238,14 +228,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return const SizedBox.shrink();
   }
 
-  // 🔄 هنا العملية الفعلية التي تغير القيمة في الـ CartProvider وفي الواجهة
   void _updateStatus(CartProvider provider, String newStatus, String message) {
     setState(() {
       currentStatus = newStatus;
       widget.order.status = newStatus;
     });
 
-    // تحديث الحالة داخل الـ CartProvider
     provider.updateOrderStatus(widget.order.orderId, newStatus);
 
     ScaffoldMessenger.of(context).showSnackBar(

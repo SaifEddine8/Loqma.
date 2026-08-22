@@ -5,7 +5,7 @@ class OrderModel {
   final String userId;
   final String userName;
   final String userPhone;
-  final String userAddress; // 👈 عنوان المشتري / موقع التسليم
+  final String userAddress; //  عنوان المشتري / موقع التسليم
   final Map<Offer, int> orderedItems;
   final double totalPrice;
   final DateTime orderDate;

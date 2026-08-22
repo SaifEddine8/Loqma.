@@ -55,7 +55,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 4),
                     Text(user.location?.address ?? 'Unknown'),
                     
-                    // 🚀 🔥 قسم الإحصائيات الجديد للمتطوع (جنب بعض)
                     if (user.type == UserType.volunteer) ...[
                       const SizedBox(height: 16),
                       Consumer<DeliveryProvider>(
@@ -114,9 +113,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               
-                              const SizedBox(width: 12), // مسافة بين الصندوقين
+                              const SizedBox(width: 12), 
                               
-                              // القسم الثاني: عدد الوجبات الكلي
                               Expanded(
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -131,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        Icons.fastfood, // أيقونة الوجبات
+                                        Icons.fastfood, 
                                         color: ConstantColors.primaryColor,
                                         size: 24,
                                       ),

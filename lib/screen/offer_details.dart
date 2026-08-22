@@ -216,7 +216,7 @@ class _OfferDetailsState extends State<OfferDetails> {
                   left: 20,
                   child: CircleAvatar(
                     backgroundColor: Colors.black54,
-                    child: CartIcon()))
+                    child: CartIcon(iconColor: Colors.white)))
               ],
             ),
             Padding(

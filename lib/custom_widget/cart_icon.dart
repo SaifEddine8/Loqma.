@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loqma/screen/cart_screen.dart';
 
 class CartIcon extends StatelessWidget {
-  const CartIcon({super.key});
+  Color iconColor;
+   CartIcon({super.key,required this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class CartIcon extends StatelessWidget {
           MaterialPageRoute(builder: (context) => CartScreen()),
         );
       },
-      child: Icon(Icons.shopping_cart_outlined, color: Colors.black),
+      child: Icon(Icons.shopping_cart_outlined, color:iconColor),
     );
   }
 }

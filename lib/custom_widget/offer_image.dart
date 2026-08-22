@@ -22,7 +22,6 @@ class OfferImage extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget imageWidget = _buildImage();
 
-    // تطبيق الـ BorderRadius إذا تم تمريره
     if (borderRadius != null) {
       imageWidget = ClipRRect(
         borderRadius: borderRadius!,
@@ -36,7 +35,6 @@ class OfferImage extends StatelessWidget {
   Widget _buildImage() {
     final String path = imagePath.trim();
 
-    // 1. في حال كان المسار رابط إنترنت (http / https) أو كنا نعمل على بيئة الويب
     if (path.startsWith('http://') || path.startsWith('https://') || kIsWeb) {
       return Image.network(
         path,
@@ -47,14 +45,12 @@ class OfferImage extends StatelessWidget {
       );
     }
 
-    // 2. تنظيف المسار في حال كان يبدأ بـ file://
     final cleanPath = path.startsWith('file://')
         ? path.replaceFirst('file://', '')
         : path;
 
     final file = File(cleanPath);
 
-    // 3. قراءة الملف من الذاكرة المحلية للجهاز
     if (file.existsSync()) {
       return Image.file(
         file,
@@ -65,7 +61,6 @@ class OfferImage extends StatelessWidget {
       );
     }
 
-    // 4. صورة افتراضية في حال عدم العثور على الملف
     return _buildPlaceholder();
   }
 

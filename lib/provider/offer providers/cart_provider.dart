@@ -189,9 +189,7 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // 4️⃣ تحديث حالة الطلب المصححة
   void updateOrderStatus(String orderId, String newStatus) {
-    // 👈 تم التصحيح هنا لاستخدام _allOrders بدلاً من _myOrders
     final index = _allOrders.indexWhere((o) => o.orderId == orderId);
     if (index != -1) {
       _allOrders[index].status = newStatus;

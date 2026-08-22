@@ -113,7 +113,7 @@ class _HomeScreen extends State<HomeScreen> {
           ],
         ),
         actions: [
-          CartIcon(),
+          CartIcon(iconColor: Colors.black),
           context.watch<UpdateUserProvider>().currentUser!.type ==
                   UserType.volunteer
               ? Padding(

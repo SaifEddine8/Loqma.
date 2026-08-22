@@ -84,7 +84,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CartIcon(),
+            child: CartIcon(iconColor: Colors.black,),
           ),
         ],
       ),

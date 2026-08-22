@@ -39,7 +39,7 @@ class FavoriteScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CartIcon(),
+            child: CartIcon(iconColor: Colors.black,),
           ),
         ],
         centerTitle: true,

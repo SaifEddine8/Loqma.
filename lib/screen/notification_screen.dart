@@ -61,7 +61,6 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
               itemBuilder: (context, index) {
                 final item = combinedList[index];
 
-                // 🔔 1. عرض الإشعارات
                 if (item is NotificationModel) {
                   bool isFine = item.penaltyAmount != null && item.penaltyAmount! > 0;
 
@@ -93,7 +92,6 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                           ? const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey)
                           : null,
                           
-                      // ⚡ ⚡ الربط الجديد المفكوك: نقل المتطوع لشاشة التفاصيل عند الضغط على الإشعار ⚡ ⚡
                       onTap: () {
                         if (item.order != null) {
                           Navigator.push(
@@ -112,7 +110,6 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                   );
                 }
 
-                // 🧾 2. عرض الفواتير والطلبات
                 final order = item as OrderModel;
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -216,7 +213,6 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                     final quantity = entry.value;
                     double itemTotal = (offer.price ?? 0) * quantity;
 
-                    // ⚡ البحث عن صاحب العرض آمن وبدون استخدام ownerId المفقود
                     final ownerUser = users.firstWhere(
                       (u) => u.id == offer.volunteerId,
                       orElse: () => users.first,
@@ -254,7 +250,7 @@ class _ReceiptsHistoryScreenState extends State<ReceiptsHistoryScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Offered by: ${ownerUser.fullName}', // 👈 اسم صاحب العرض
+                            'Offered by: ${ownerUser.fullName}', 
                             style: TextStyle(fontSize: 12, color: Colors.grey.shade700, fontStyle: FontStyle.italic),
                           ),
                         ],
